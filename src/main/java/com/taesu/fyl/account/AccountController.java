@@ -21,7 +21,7 @@ public class AccountController {
 
     @RequestMapping(value="/account", method= RequestMethod.GET)
     @ResponseBody
-    public Object readACcount(){
+    public Object readAccount(){
         return accountService.readAccount();
     }
 
