@@ -1,6 +1,6 @@
 package com.taesu.fyl.account;
 
-import com.taesu.fyl.account.dto.AccountForSelect;
+import com.taesu.fyl.account.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +12,19 @@ import java.util.List;
 @Mapper
 @Component
 public interface AccountDao {
-    List<AccountForSelect> readAccount();
-    AccountForSelect readAccountById(String id);
+
+    int createAccount(AccountForInsert account);
+    int createAccountAythorityMapping(AccountForAuthorityMapping accountForAuthorityMapping);
+
+    AccountForSecurity readAccountForSecurity(String userId);
+    AccountForSelect readAccountById(String userId);
+    List<AccountForSelect>  readAccount();
+
+    int updateAccountById(AccountForUpdate account);
+    int updateUserAccountById(AccountForUpdate account);
+    int updateAccountAuthorityMapping(AccountForAuthorityMapping accountForAuthorityMapping);
+
+    int deleteAccountById(String userId);
+    int deleteAccountAuthorityMapping(String userId);
 }
+

@@ -1,6 +1,7 @@
 package com.taesu.fyl.filter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -55,6 +56,7 @@ public class RequestBodyPrintFilter implements Filter {
         public HttpRequestWrapper(HttpServletRequest request) throws IOException {
             super(request);
             InputStream is = super.getInputStream();
+            bodyData = IOUtils.toByteArray(is);
         }
 
         @Override

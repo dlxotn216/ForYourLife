@@ -5,16 +5,20 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 /**
- * Created by dlxot on 2016-12-18.
+ * Created by dlxot on 2016-12-21.
  */
 @Data
-public class AccountForSelect {
+public class AccountForInsert {
+
     private String userId;
     private String passwd;
     private String userName;
     private String userEmail;
     private Character emailYn;
+    private Timestamp requestDate;
+    private String premit;
     private String phone;
     private Character smsYn;
-    private Timestamp regDate;
+
+    private String authName;
 }

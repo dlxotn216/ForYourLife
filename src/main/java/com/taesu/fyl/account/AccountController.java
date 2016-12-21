@@ -1,37 +1,86 @@
 package com.taesu.fyl.account;
 
+import com.taesu.fyl.account.dto.AccountForInsert;
 import com.taesu.fyl.account.dto.AccountForSelect;
+import com.taesu.fyl.account.dto.AccountForUpdate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.remoting.httpinvoker.HttpComponentsHttpInvokerRequestExecutor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by dlxot on 2016-12-18.
  */
 @Controller
 public class AccountController {
+
     @Autowired
     private AccountService accountService;
 
-    @RequestMapping(value="/account", method= RequestMethod.GET)
-    @ResponseBody
-    public Object readAccount(){
-        return accountService.readAccount();
+    private static Logger log = LoggerFactory.getLogger(AccountController.class);
+
+    /**
+     * @api {get} /account/:userId Get Account information
+     * @apiVersion 0.1.0
+     * @apiName ReadAccountById
+     * @apiGroup Account
+     *
+     * @apiParam {String} userId Users unique ID.
+     *
+     * @apiSuccess {String} passwd User's encoded password
+     * @apiSuccess {String} userName User's name
+     *
+     * @apiSuccessExample Success-Response:
+     *      Http/1.1 200 OK
+     *      {
+     *          "passwd": "afeaewaar232423rr32r2rrbr",
+     *          "userName": "Lee"
+     *      }
+     *
+     * @apiError UserNotFound The id of the User was not found
+     *
+     */
+    @RequestMapping(value="/account/{userId}", method=RequestMethod.GET)
+    public Object readAccountById(@PathVariable String userId){
+        return accountService.readAccountById(userId);
     }
 
-    @RequestMapping(value="/account/{id}", method=RequestMethod.GET)
-    @ResponseBody
-    public Object readAccountById(@PathVariable  String id){
-        AccountForSelect result = accountService.readAccountById(id);
+    @RequestMapping(value="/account/create", method= RequestMethod.GET)
+    public String readAccountView(){
+        return "account/create";
+    }
 
-        return result==null ?
-                new ResponseEntity<AccountForSelect>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<AccountForSelect>(result, HttpStatus.OK);
+    @ResponseBody
+    @RequestMapping(value="/account", method= RequestMethod.POST)
+    public Object createAccount(@RequestBody AccountForInsert account){
+        System.out.println(account.getPasswd());
+        System.out.println(account.getUserName());
+        System.out.println(account.getUserEmail());
+
+        accountService.createAccount(account);
+        log.info("create account finished");
+
+        return new ResponseEntity<Object>(HttpStatus.OK);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value="/account/{userId}", method=RequestMethod.PUT)
+    public Object updateAccountById(@RequestBody AccountForUpdate accountForUpdate, @PathVariable String userId){
+        return accountService.updateAccountById(accountForUpdate, userId)> 0 ?
+                new ResponseEntity<Object>(HttpStatus.OK)
+                : new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/account/{userId}", method=RequestMethod.DELETE)
+    public Object deleteAccountById(@PathVariable String userId){
+        return accountService.deleteAccount(userId) > 0 ?
+                new ResponseEntity<Object>(HttpStatus.OK)
+                : new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,10 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.taesu.fyl.account.AccountDao">
+
+    <insert id="createAccount" parameterType="AccountForInsert">
+        INSERT INTO ACCOUNT(USER_ID, PASSWD, USER_NAME, USER_EMAIL, EMAIL_YN, PHONE, SMS_YN)
+        VALUES(#{userId}, #{passwd}, #{userName}, #{userEmail}, #{emailYn},
+        #{phone}, #{smsYn})
+    </insert>
+    <insert id="createAccountAuthorityMapping" parameterType="AccountForAuthorityMapping">
+        INSERT INTO ACCOUNT_AUTHORITY_MAPPING(USER_ID, AUTH_NAME)
+        VALUES(#{userId}, #{authName})
+    </insert>
+
+    <select id="readAccounForSecurity" parameterType="String" resultType="AccountForSecurity">
+        SELECT USER_ID, PASSWD, PERMIT
+        FROM ACCOUNT
+        WHERE USER_ID = #{userId}
+    </select>
     <select id="readAccount" resultType="AccountForSelect">
         SELECT * FROM ACCOUNT;
     </select>
     <select id="readAccountById" resultType="AccountForSelect" parameterType="String">
-        SELECT * FROM ACCOUNT WHERE id=#{id}
+        SELECT * FROM ACCOUNT WHERE USER_ID=#{userId}
     </select>
+
+    <update id="updateAccountById" parameterType="AccountForUpdate">
+      UPDATE ACCOUNT
+          SET
+            ACCOUNT.PASSWD = #{passwd},
+            ACCOUNT.USER_NAME = #{userName},
+            ACCOUNT.USER_EMAIL = #{userEmail},
+            ACCOUNT.EMAIL_YN = #{emailYn},
+            ACCOUNT.SMS_YN = #{smsYn},
+            ACCOUNT.PHONE = #{phone}
+          WHERE
+            ACCOUNT.USER_ID = #{userId}
+    </update>
+    <update id="updateUserAccountById" parameterType="AccountForUpdate">
+        UPDATE ACCOUNT
+        SET
+          ACCOUNT.PERMIT = #{permit}
+        WHERE
+          ACCOUNT.USER_ID = #{userId}
+    </update>
+    <update id="updateAccountAuthorityMapping" parameterType="AccountForAuthorityMapping">
+      UPDATE ACCOUNT_AUTHORITY_MAPPING
+      SET  AUTH_NAME = #{authName}
+      WHERE USER_ID = #{userId}
+    </update>
+
+    <delete id="deleteAccountById" parameterType="String">
+      DELETE FROM ACCOUNT
+      WHERE USER_ID = #{userId}
+    </delete>
+    <delete id="deleteAccountAuthorityMapping" parameterType="String">
+      DELETE FROM ACCOUNT_AUTHORITY_MAPPING
+      WHERE USER_ID = #{userId}
+    </delete>
+
+
 </mapper>
