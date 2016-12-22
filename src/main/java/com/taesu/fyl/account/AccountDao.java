@@ -14,7 +14,7 @@ import java.util.List;
 public interface AccountDao {
 
     int createAccount(AccountForInsert account);
-    int createAccountAythorityMapping(AccountForAuthorityMapping accountForAuthorityMapping);
+    int createAccountAuthorityMapping(AccountForAuthorityMapping accountForAuthorityMapping);
 
     AccountForSecurity readAccountForSecurity(String userId);
     AccountForSelect readAccountById(String userId);

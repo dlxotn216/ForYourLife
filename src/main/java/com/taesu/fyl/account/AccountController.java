@@ -3,6 +3,7 @@ package com.taesu.fyl.account;
 import com.taesu.fyl.account.dto.AccountForInsert;
 import com.taesu.fyl.account.dto.AccountForSelect;
 import com.taesu.fyl.account.dto.AccountForUpdate;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by dlxot on 2016-12-18.
  */
 @Controller
+@Slf4j
 public class AccountController {
 
     @Autowired
@@ -47,6 +49,11 @@ public class AccountController {
     @RequestMapping(value="/account/{userId}", method=RequestMethod.GET)
     public Object readAccountById(@PathVariable String userId){
         return accountService.readAccountById(userId);
+    }
+
+    @RequestMapping(value="/account/update", method= RequestMethod.GET)
+    public String readAccountUpdateView(){
+        return "account/update";
     }
 
     @RequestMapping(value="/account/create", method= RequestMethod.GET)

@@ -36,6 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private PasswordEncoder passwordEncoder;
 
     private final String NOT_MATCHING_ANY_ID_OR_PW = "This account is not matching any id or password";
+    private final String NOT_PERMIT_ID = "This Account is not permitted";
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -46,17 +47,17 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         //System.out.println("user Id : "+ userId);
         AccountForSecurity user = accountService.readAccountForSecurity(userId);
         if(user == null){
-            throw new UsernameNotFoundException("This account is not matching any id or password");
+            throw new UsernameNotFoundException(NOT_MATCHING_ANY_ID_OR_PW);
         }
         //System.out.println(userId+" select success");
 
         //패스워드 매칭 수행
         if(!matchPasswd( authToken.getCredentials(), user.getPasswd() )){
-            throw new BadCredentialsException("This account is not matching any id or password");
+            throw new BadCredentialsException(NOT_MATCHING_ANY_ID_OR_PW);
         }
 
         if(user.getPermit().toUpperCase().equals("N")){
-            throw new BadCredentialsException("This account is not permitted");
+            throw new BadCredentialsException(NOT_PERMIT_ID);
         }
 
         List<GrantedAuthority> authorities = getUserRoles(userId);

@@ -12,7 +12,7 @@
         VALUES(#{userId}, #{authName})
     </insert>
 
-    <select id="readAccounForSecurity" parameterType="String" resultType="AccountForSecurity">
+    <select id="readAccountForSecurity" parameterType="String" resultType="AccountForSecurity">
         SELECT USER_ID, PASSWD, PERMIT
         FROM ACCOUNT
         WHERE USER_ID = #{userId}

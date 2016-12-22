@@ -50,7 +50,7 @@ public class AccountService {
         accountForAuthorityMapping.setAuthName(account.getAuthName());
 
         accountDao.createAccount(account);
-        accountDao.createAccountAythorityMapping(accountForAuthorityMapping);
+        accountDao.createAccountAuthorityMapping(accountForAuthorityMapping);
     }
 
     /**
