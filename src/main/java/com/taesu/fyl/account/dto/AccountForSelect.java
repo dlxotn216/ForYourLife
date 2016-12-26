@@ -17,4 +17,5 @@ public class AccountForSelect {
     private String phone;
     private Character smsYn;
     private Timestamp regDate;
+    private String permit;
 }

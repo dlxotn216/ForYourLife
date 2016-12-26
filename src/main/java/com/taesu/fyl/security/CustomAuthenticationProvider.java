@@ -4,6 +4,7 @@ import com.taesu.fyl.account.AccountService;
 import com.taesu.fyl.account.dto.AccountForSecurity;
 import com.taesu.fyl.authority.AuthorityService;
 import com.taesu.fyl.authority.dto.AuthorityForSelect;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,6 +24,7 @@ import java.util.List;
 /**
  * Created by dlxot on 2016-12-21.
  */
+@Slf4j
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -79,6 +81,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private List<GrantedAuthority> getUserRoles(String username){
         List<GrantedAuthority> results = new ArrayList<>(0);
+        log.info("DEBUG CHECK :"+username);
         List<AuthorityForSelect> userAuths = authorityService.readAccountAuthById(username);
 
         for(AuthorityForSelect au : userAuths){

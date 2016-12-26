@@ -13,6 +13,7 @@ import java.util.List;
 public class AuthorityService {
     @Autowired
     private AuthorityDao authorityDao;
+
     public List<AuthorityForSelect> readAccountAuthById(String userId){
         return authorityDao.readAccountAuthById(userId);
     }

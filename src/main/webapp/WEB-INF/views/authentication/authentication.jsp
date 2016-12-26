@@ -25,7 +25,11 @@
         </div>
 
         <div class="form-group">
-            <p>${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</p>
+            <c:if test="${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message != null }">
+                <div class="alert alert-danger">
+                    <strong>INFO !</strong> ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
+                </div>
+            </c:if>
             <c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION" />       <!-- 새로고침시 취소하도록(error=true 파라미터 필요 없어짐) -->
         </div>
         <br>

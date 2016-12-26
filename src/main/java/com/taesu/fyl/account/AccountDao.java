@@ -21,7 +21,7 @@ public interface AccountDao {
     List<AccountForSelect>  readAccount();
 
     int updateAccountById(AccountForUpdate account);
-    int updateUserAccountById(AccountForUpdate account);
+    int updateAccountPermitById(AccountForUpdate account);
     int updateAccountAuthorityMapping(AccountForAuthorityMapping accountForAuthorityMapping);
 
     int deleteAccountById(String userId);

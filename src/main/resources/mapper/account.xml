@@ -26,17 +26,37 @@
 
     <update id="updateAccountById" parameterType="AccountForUpdate">
       UPDATE ACCOUNT
-          SET
-            ACCOUNT.PASSWD = #{passwd},
+       <set>
+        <if test="passwd != null">
+              ACCOUNT.PASSWD = #{passwd},
+        </if>
+        <if test="userName != null">
             ACCOUNT.USER_NAME = #{userName},
+        </if>
+        <if test="userEmail != null">
             ACCOUNT.USER_EMAIL = #{userEmail},
+        </if>
+        <if test="emailYn != null">
             ACCOUNT.EMAIL_YN = #{emailYn},
+        </if>
+        <if test="smsYn != null">
             ACCOUNT.SMS_YN = #{smsYn},
-            ACCOUNT.PHONE = #{phone}
+        </if>
+        <if test="phone != null">
+            ACCOUNT.PHONE = #{phone},
+        </if>
+        <if test="permit != null">
+            ACCOUNT.PERMIT = #{permit},
+        </if>
+       <if test="uptUserId != null">
+           ACCOUNT.UPT_USER_ID = #{uptUserId},
+       </if>
+            ACCOUNT.UPT_DATE = NOW()
+       </set>
           WHERE
             ACCOUNT.USER_ID = #{userId}
     </update>
-    <update id="updateUserAccountById" parameterType="AccountForUpdate">
+    <update id="updateAccountPermitById" parameterType="AccountForUpdate">
         UPDATE ACCOUNT
         SET
           ACCOUNT.PERMIT = #{permit}
@@ -45,9 +65,11 @@
     </update>
     <update id="updateAccountAuthorityMapping" parameterType="AccountForAuthorityMapping">
       UPDATE ACCOUNT_AUTHORITY_MAPPING
-      SET  AUTH_NAME = #{authName}
+      SET
+        AUTH_NAME = #{authName}
       WHERE USER_ID = #{userId}
     </update>
+
 
     <delete id="deleteAccountById" parameterType="String">
       DELETE FROM ACCOUNT

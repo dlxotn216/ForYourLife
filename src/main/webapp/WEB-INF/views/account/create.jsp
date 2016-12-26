@@ -11,8 +11,6 @@
 <script>
     $(document).ready(function(){
         $("#createForm").submit(function(){
-
-
             var data = {
                 "userId": $("input[name=userId]").val(),
                 "userName": $("input[name=userName]").val(),

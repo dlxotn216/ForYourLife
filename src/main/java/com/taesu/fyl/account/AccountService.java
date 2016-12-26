@@ -102,8 +102,16 @@ public class AccountService {
 
         this.changeSecurityToken(account.getUserId());
 
-        int result = accountDao.updateUserAccountById(account)
+        int result = accountDao.updateAccountPermitById(account)
                 & accountDao.updateAccountAuthorityMapping(accountForAuthorityMapping);;
+        return result;
+    }
+
+    public int updateAccountPermitById(AccountForUpdate account){
+
+        Integer result = accountDao.updateAccountPermitById(account);
+        this.changeSecurityToken(account.getUserId());
+
         return result;
     }
 
