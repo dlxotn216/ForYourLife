@@ -19,10 +19,16 @@
 <div class="container">
     <h2>로그인</h2>
     <form id="authenticationForm" action="/authenticationProcess" method="POST">
-        <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
             <input type="text" name="userId"  class="form-control" placeholder="Enter Your Account" required/>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
             <input type="password" name="passwd" class="form-control" placeholder="Enter Your Password" required/>
         </div>
+
+
 
         <div class="form-group">
             <c:if test="${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message != null }">
