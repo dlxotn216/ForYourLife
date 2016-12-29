@@ -26,5 +26,7 @@ public interface AccountDao {
 
     int deleteAccountById(String userId);
     int deleteAccountAuthorityMapping(String userId);
+
+    String readAuthTokenById(String userId);
 }
 

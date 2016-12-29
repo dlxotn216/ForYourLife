@@ -3,9 +3,9 @@
 <mapper namespace="com.taesu.fyl.account.AccountDao">
 
     <insert id="createAccount" parameterType="AccountForInsert">
-        INSERT INTO ACCOUNT(USER_ID, PASSWD, USER_NAME, USER_EMAIL, EMAIL_YN, PHONE, SMS_YN)
+        INSERT INTO ACCOUNT(USER_ID, PASSWD, USER_NAME, USER_EMAIL, EMAIL_YN, PHONE, SMS_YN, AUTH_TOKEN)
         VALUES(#{userId}, #{passwd}, #{userName}, #{userEmail}, #{emailYn},
-        #{phone}, #{smsYn})
+        #{phone}, #{smsYn}, #{authToken})
     </insert>
     <insert id="createAccountAuthorityMapping" parameterType="AccountForAuthorityMapping">
         INSERT INTO ACCOUNT_AUTHORITY_MAPPING(USER_ID, AUTH_NAME)
@@ -22,6 +22,9 @@
     </select>
     <select id="readAccountById" resultType="AccountForSelect" parameterType="String">
         SELECT * FROM ACCOUNT WHERE USER_ID=#{userId}
+    </select>
+    <select id="readAuthTokenById" resultType="String" parameterType="String">
+        SELECT AUTH_TOKEN FROM account where USER_ID = #{userId}
     </select>
 
     <update id="updateAccountById" parameterType="AccountForUpdate">

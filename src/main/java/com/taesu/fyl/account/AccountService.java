@@ -1,8 +1,11 @@
 package com.taesu.fyl.account;
 
 import com.taesu.fyl.account.dto.*;
+import com.taesu.fyl.encoder.UserIdEncoder;
+import com.taesu.fyl.mail.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionInformation;
@@ -13,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -23,13 +27,20 @@ import java.util.List;
 @Slf4j
 @Service
 public class AccountService {
-
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private AccountDao accountDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserIdEncoder userIdEncoder;
+
+    @Value("${callbackurl}")
+    String callback;
 
     public AccountForSecurity readAccountForSecurity(String userId){
         return accountDao.readAccountForSecurity(userId);
@@ -40,7 +51,7 @@ public class AccountService {
     }
 
     @Transactional
-    public void createAccount(AccountForInsert account){
+    public void createAccount(AccountForInsert account, HttpServletRequest request){
         account.setRequestDate(new Timestamp(System.currentTimeMillis()));
         account.setPasswd(passwordEncoder.encode(account.getPasswd()));
         account.setAuthName("ROLE_USER");               //초기 회원가입은 사용자로
@@ -49,6 +60,15 @@ public class AccountService {
         accountForAuthorityMapping.setUserId(account.getUserId());
         accountForAuthorityMapping.setAuthName(account.getAuthName());
 
+//        String callBack = "http://"+request.getLocalName();
+        //String callBack = "http://"+request.getLocalAddr();
+        String callBack = "http://"+callback;
+
+        String userIdEncode = userIdEncoder.createToken(account);
+        account.setAuthToken(userIdEncode);
+
+        mailService.sendMailForAccountAuthenticationByNaver(account, callBack);;
+        mailService.sendMailForAccountAuthenticationByNGoogle(account, callBack);;
         accountDao.createAccount(account);
         accountDao.createAccountAuthorityMapping(accountForAuthorityMapping);
     }
@@ -157,4 +177,21 @@ public class AccountService {
     public List<AccountForSelect> readAllAccount(){
         return accountDao.readAccount();
     }
+
+    private String readAuthTokenById(String userId){
+        return accountDao.readAuthTokenById(userId);
+    }
+
+    private Boolean checkAuthTokenIsAvalible(String origin, String userId){
+        return userIdEncoder.isMatched(origin, readAuthTokenById((userId)));
+    }
+
+    public void updateUserPermitByAuthToken(String origin, String userId){
+        if(this.checkAuthTokenIsAvalible(origin, userId)){
+            log.info("DEBUG CHECK correct auth token");
+        } else {
+            log.info("DEBUG CHECK incorrect auth token");
+        }
+    }
+
 }

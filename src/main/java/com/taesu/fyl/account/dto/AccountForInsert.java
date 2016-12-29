@@ -19,6 +19,7 @@ public class AccountForInsert {
     private String premit;
     private String phone;
     private Character smsYn;
+    private String authToken;
 
     private String authName;
 }

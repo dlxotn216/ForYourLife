@@ -6,7 +6,7 @@
 
 	<!-- Templates -->
 	<definition name="layout.basic" template="/WEB-INF/views/layout/basic.jsp">
-		<put-attribute name="title" value="Spring Web MVC with Tiles 3" />
+		<put-attribute name="title" value="For Your Life Application" />
 		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
 		<put-attribute name="body" value="" />
 		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />

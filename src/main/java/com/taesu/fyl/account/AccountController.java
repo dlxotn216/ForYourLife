@@ -2,6 +2,7 @@ package com.taesu.fyl.account;
 
 import com.taesu.fyl.account.dto.AccountForInsert;
 import com.taesu.fyl.account.dto.AccountForUpdate;
+import com.taesu.fyl.encoder.UserIdEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by dlxot on 2016-12-18.
@@ -18,6 +21,9 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private UserIdEncoder userIdEncoder;
 
     private static Logger log = LoggerFactory.getLogger(AccountController.class);
 
@@ -58,14 +64,25 @@ public class AccountController {
         return "account/create";
     }
 
+    @RequestMapping( value = "/accounts/{userId}/{token}/authentication", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateUserPermitByuAuthentication(
+            @PathVariable String userId,
+            @PathVariable String token
+    ){
+        log.info("DEBUG CHECK authentication "+userId+" "+token);
+        accountService.updateUserPermitByAuthToken(token, userId);
+        return "";
+    }
+
     @ResponseBody
     @RequestMapping(value="/account", method= RequestMethod.POST)
-    public Object createAccount(@RequestBody AccountForInsert account){
+    public Object createAccount(@RequestBody AccountForInsert account, HttpServletRequest request){
         System.out.println(account.getPasswd());
         System.out.println(account.getUserName());
         System.out.println(account.getUserEmail());
 
-        accountService.createAccount(account);
+        accountService.createAccount(account, request);
         log.info("create account finished");
 
         return new ResponseEntity<Object>(HttpStatus.OK);
