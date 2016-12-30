@@ -1,0 +1,8 @@
+#userModal .modal-content{
+    padding: 30px;
+}
+#userModal .modal-header{
+    color: blueviolet;
+    font-weight:bolder;
+    text-align: center;
+}

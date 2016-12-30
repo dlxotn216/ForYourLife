@@ -40,12 +40,12 @@ public class MailService {
 
             String userIdEncode = account.getAuthToken();
 
-            String htmlContent = "<h3>회원가입 계정 인증 안내</h3>";
-            htmlContent+= "<p>회원가입 절차를 진행하기 위해 아래 URL로 접속하여 인증이 필요하니다.</p>";
-            htmlContent+= "<form method='POST' action='"+callBack+"/accounts/"+account.getUserId()+"/"+userIdEncode+"/authentication'>";
-            htmlContent+= "<input type='hidden' name='_method' value='put' />";
-            htmlContent+= "<button>링크로</button>";
-            htmlContent+= "</form>";
+            String htmlContent   = "<h3>회원가입 계정 인증 안내</h3>";
+            htmlContent         += "<p>회원가입 절차를 진행하기 위해 아래 URL로 접속하여 인증이 필요하니다.</p>";
+            htmlContent         += "<form method='POST' action='"+callBack+"/accounts/"+account.getUserId()+"/"+userIdEncode+"/authentication'>";
+            htmlContent         += "<input type='hidden' name='_method' value='put' />";
+            htmlContent         += "<button>링크로</button>";
+            htmlContent         += "</form>";
             //htmlContent+= "<a href='"+callBack+"/accounts/"+account.getUserId()+"/"+userIdEncode+"/authentication'>test</a>";
 
             messageHelper.setText(htmlContent, true);
@@ -73,11 +73,11 @@ public class MailService {
 
             String userIdEncode = account.getAuthToken();
 
-            String htmlContent = "<h3>회원가입 계정 인증 안내</h3>";
-            htmlContent+= "<form method='POST' action='"+callBack+"/accounts/"+account.getUserId()+"/"+userIdEncode+"/authentication'>";
-            htmlContent+= "<input type='hidden' name='_method' value='put' />";
-            htmlContent+= "<button>링크로</button>";
-            htmlContent+= "</form>";
+            String htmlContent   = "<h3>회원가입 계정 인증 안내</h3>";
+            htmlContent         += "<form method='POST' action='"+callBack+"/accounts/"+account.getUserId()+"/"+userIdEncode+"/authentication'>";
+            htmlContent         += "<input type='hidden' name='_method' value='put' />";
+            htmlContent         += "<button>링크로</button>";
+            htmlContent         += "</form>";
 
             messageHelper.setText(htmlContent, true);
             messageHelper.setFrom(username);

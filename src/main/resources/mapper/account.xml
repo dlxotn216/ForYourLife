@@ -18,10 +18,22 @@
         WHERE USER_ID = #{userId}
     </select>
     <select id="readAccount" resultType="AccountForSelect">
-        SELECT * FROM ACCOUNT;
+        SELECT *
+        FROM ACCOUNT AS ACC
+        INNER JOIN ACCOUNT_AUTHORITY_MAPPING AS AAM
+        ON ACC.USER_ID = AAM.USER_ID
+        INNER JOIN AUTHORITY as AUTH
+        ON AAM.AUTH_NAME = AUTH.AUTH_NAME
+        ORDER BY AAM.AUTH_NAME
     </select>
     <select id="readAccountById" resultType="AccountForSelect" parameterType="String">
-        SELECT * FROM ACCOUNT WHERE USER_ID=#{userId}
+        SELECT *
+        FROM ACCOUNT as ACC
+        INNER JOIN ACCOUNT_AUTHORITY_MAPPING AS AAM
+        ON ACC.USER_ID = AAM.USER_ID
+        INNER JOIN AUTHORITY as AUTH
+        ON AAM.AUTH_NAME = AUTH.AUTH_NAME
+        WHERE ACC.USER_ID=#{userId}
     </select>
     <select id="readAuthTokenById" resultType="String" parameterType="String">
         SELECT AUTH_TOKEN FROM account where USER_ID = #{userId}

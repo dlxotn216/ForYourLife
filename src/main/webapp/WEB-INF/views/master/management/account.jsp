@@ -9,88 +9,22 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <script src="/resources/js/jquery.min.js"></script>
-<script>
-    $(document).ready(function(){
-        $(".active-button").click(function(e){
-            var userId = $(this).prop("value");
-            if($(this).attr('permit') === 'Y'){
-                var permit = 'N';
-                var addClass = "btn-danger";
-                var removeClass = "btn-success";
-                var text = "Inactive";
-
-            } else {
-                var permit = 'Y';
-                var addClass = "btn-success";
-                var removeClass = "btn-danger";
-                var text = "Active";
-            }
-            var data = {
-                "userId" : userId,
-                "permit" : permit
-            };
-            var self = this;
-            $.ajax({
-                type:"PUT",
-                url:"/master/accounts/"+userId+"/permit",
-                data:JSON.stringify(data),
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                success:function(res){
-                    $(self).addClass(addClass);
-                    $(self).removeClass(removeClass);
-                    $(self).text(text);
-                    $(self).attr('permit', permit);
-                }
-            })
-            e.stopPropagation();
-        });
-
-        $(".master-account-row").click(function(){
-            var userId = $(this).attr('userId');
-
-            $.ajax({
-                type:"GET",
-                url:"/master/accounts/"+userId,
-                success:function(res){
-                    console.log("DEBUG CHECK RESPONSE:", res);
-                    $("#userModal").modal('toggle');
-                    $("#user-modal-userId").val(res.userId);
-                    $("#user-modal-userEmail").val(res.userEmail);
-                    $("#user-modal-userName").val(res.userName);
-                    $("#user-modal-regDate").val(res.regDate);
-                    $("#user-modal-permit").val(res.permit);
-                    $("#user-modal-phone").val(res.phone);
-                    if(res.smsYn === 'Y'){
-                        $("#user-modal-smsY").attr('checked', true);
-                    } else {
-                        $("#user-modal-smsN").attr('checked', true);
-                    }
-                    if(res.emailYn === 'Y'){
-                        $("#user-modal-emailY").attr('checked', true);
-                    } else {
-                        $("#user-modal-emailN").attr('checked', true);
-                    }
-                }
-            });
-        });
-
-
-    });
-</script>
+<script src="/resources/js/master/management/account.js"></script>
+<link rel="stylesheet" href="/resources/css/master/management/account.css" />
 
 <div class="table-responsive">
     <table class="table table-hover">
         <tr>
             <th class="text-center">계정</th>
-            <th class="text-center">이메일</th>
+            <th class="text-center">권한</th>
+            <th class="text-center">이름</th>
             <th class="text-center">PERMIT</th>
             <th class="text-center">등록/변경일</th>
         </tr>
         <c:forEach var="account" items="${accounts}">
         <tr class="master-account-row" userId="${ account.userId }">
             <td class="text-center">${account.userId}</td>
+            <td class="text-center">${account.description}</td>
             <td class="text-center">${account.userName}</td>
             <c:if test="${account.permit == 'Y'}">
                 <td class="text-center"><button type="button" value="${account.userId}" permit="Y" class="active-button btn btn-success btn-sm">Active</button></td>
@@ -109,7 +43,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
+                <h2 class="modal-title">사용자 상세정보</h2>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
@@ -144,9 +78,22 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-sm-4" for="user-modal-authority">사용자 권한</label>
+                        <div class="col-sm-8">
+                            <select class="form-control authoritySelect" id="user-modal-authority">
+                                <c:forEach var="authority" items="${authorities}">
+                                    <option value="${authority.authName}" selected>${authority.description}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-sm-4" for="user-modal-permit">계정 허가</label>
                         <div class="col-sm-8">
-                            <input id="user-modal-permit" class="form-control" disabled />
+                            <select class="form-control authoritySelect" id="user-modal-permit">
+                                <option value="Y">Y</option>
+                                <option value="N">N</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -167,7 +114,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">닫기</button>
             </div>
         </div>
 

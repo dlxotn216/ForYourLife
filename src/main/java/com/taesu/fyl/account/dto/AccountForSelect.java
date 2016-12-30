@@ -18,4 +18,6 @@ public class AccountForSelect {
     private Character smsYn;
     private Timestamp regDate;
     private String permit;
+    private String authName;
+    private String description;
 }

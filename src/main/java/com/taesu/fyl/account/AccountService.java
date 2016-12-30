@@ -135,6 +135,14 @@ public class AccountService {
         return result;
     }
 
+    public int updateAccountAuthorityById(AccountForAuthorityMapping account){
+
+        Integer result = accountDao.updateAccountAuthorityMapping(account);
+        this.changeSecurityToken(account.getUserId());
+
+        return result;
+    }
+
     /**
      * 전달된 id에 대해 delete 수행
      * 현재 세션에 로그인 된 사용자와 요청받은 삭제 대상이 같은지 비교
